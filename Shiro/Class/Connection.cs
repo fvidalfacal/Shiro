@@ -9,7 +9,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 
-namespace Shiro.Connection
+namespace Shiro.Class
 {
     public class Connection
     {
