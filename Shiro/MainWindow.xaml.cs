@@ -31,7 +31,7 @@ namespace Shiro
             }
             else
             {
-                ModernDialog.ShowMessage("Compte ou mot de passe incorrecte", "Erreur", MessageBoxButton.OK);
+                ModernDialog.ShowMessage("Nom de compte ou mot de passe incorrect", "Erreur", MessageBoxButton.OK);
             }
         }
     }

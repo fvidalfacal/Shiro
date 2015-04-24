@@ -1,5 +1,4 @@
-﻿using FirstFloor.ModernUI.Windows.Controls;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Shiro
+namespace Shiro.Pages
 {
     /// <summary>
-    /// Interaction logic for Index.xaml
+    /// Interaction logic for AddClient.xaml
     /// </summary>
-    public partial class Index : ModernWindow
+    public partial class AddClient : UserControl
     {
-        public Index()
+        public AddClient()
         {
             InitializeComponent();
         }

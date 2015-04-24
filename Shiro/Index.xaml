@@ -5,55 +5,20 @@
                   Title="Shiro"
                   MinWidth="1000"
                   MinHeight="600"
-                  ContentSource="/Pages/about.xaml"
+                  ContentSource="/Pages/Clients.xaml"
                   IsTitleVisible="True"
-                  ToolTip="{DynamicResource {x:Type ToolTip}}"
-                  WindowState="Maximized">
-
-    <mui:ModernWindow.TitleLinks>
-        <mui:Link x:Name="Link_About"
-                  DisplayName="#Link_About"
-                  Source="/Pages/About.xaml" />
-        <mui:Link x:Name="Link_Apparence"
-                  DisplayName="#Link_Apparence"
-                  Source="Pages/Appearance.xaml" />
-        <mui:Link x:Name="Link_Param"
-                  DisplayName="#Link_Param"
-                  Source="Pages/Parametre.xaml" />
-    </mui:ModernWindow.TitleLinks>
-
+                  ToolTip="{DynamicResource {x:Type ToolTip}}">
     <mui:ModernWindow.MenuLinkGroups>
-        <mui:LinkGroup x:Name="Link_CE" DisplayName="#Link_CE">
+        <mui:LinkGroup DisplayName="Gestion des clients">
             <mui:LinkGroup.Links>
-                <mui:Link x:Name="Link_CreateCE"
-                          DisplayName="#Link_CreateCE"
-                          Source="/Pages/EstimateCreator.xaml" />
-                <mui:Link x:Name="Link_DisplayCE"
-                          DisplayName="#Link_DisplayCE"
-                          Source="/Pages/DisplayEstimate.xaml" />
+                <mui:Link DisplayName="Ajouter un client" Source="Pages/AddClient.xaml" />
+                <mui:Link DisplayName="Voir la liste des clients" Source="Pages/Clients.xaml" />
             </mui:LinkGroup.Links>
         </mui:LinkGroup>
-
-        <mui:LinkGroup x:Name="Link_Customer" DisplayName="#Link_Customer">
+        <mui:LinkGroup DisplayName="Gestion des commerciaux">
             <mui:LinkGroup.Links>
-                <mui:Link x:Name="Link_DisplayCustomer"
-                          DisplayName="#Link_DisplayCustomer"
-                          Source="/Pages/DisplayCustomer.xaml" />
-                <mui:Link x:Name="Link_CreateCustomer"
-                          DisplayName="#Link_CreateCustomer"
-                          Source="/Pages/AddCustomer.xaml" />
-            </mui:LinkGroup.Links>
-        </mui:LinkGroup>
-        <mui:LinkGroup x:Name="Link_Merchandise" DisplayName="#Link_Merchandise">
-            <mui:LinkGroup.Links>
-                <mui:Link x:Name="Link_DisplayMerchandise"
-                          DisplayName="#Link_DisplayMerchandise"
-                          Source="/Pages/DisplayMerchandise.xaml" />
-                <mui:Link x:Name="Link_CreateMerchandise"
-                          DisplayName="#Link_CreateMerchandise"
-                          Source="/Pages/AddMerchandise.xaml" />
+                <mui:Link DisplayName="Voir la liste des commerciaux" Source="Pages/Commerciaux.xaml" />
             </mui:LinkGroup.Links>
         </mui:LinkGroup>
     </mui:ModernWindow.MenuLinkGroups>
-
 </mui:ModernWindow>
