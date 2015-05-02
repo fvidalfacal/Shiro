@@ -148,6 +148,7 @@
                                VerticalAlignment="Center"
                                Text="Ajouter un client" />
                     <TextBlock Grid.Row="1"
+                               Grid.Column="0"
                                Grid.ColumnSpan="3"
                                Width="138"
                                Height="16"

@@ -99,7 +99,7 @@ namespace Shiro.Pages
                     var querySelect = String.Format("SELECT max(ID_{0}) FROM {0}", "CUSTOMER");
                     var Command = ConnectionOracle.Command(querySelect).ExecuteScalar();
                     var idCustomer = Command.ToString() == String.Empty ? 1 : Convert.ToInt32(Command) + 1;
-                    ConnectionOracle.Insert("CUSTOMER", idCustomer, TextBoxFirstName.Text, TextBoxName.Text, TextBoxCompany.Text, TextBoxMail.Text, TextBoxPhone.Text);
+                    ConnectionOracle.Insert("CUSTOMER", idCustomer, TextBoxFirstName.Text, TextBoxName.Text, TextBoxCompany.Text,  TextBoxPhone.Text,TextBoxMail.Text);
                     ModernDialog.ShowMessage("Utilisateur " + TextBoxName.Text + TextBoxFirstName.Text +" ajouté avec succès", "Succès", MessageBoxButton.OK);
                     showCustomer(idCustomer, TextBoxMail.Text, TextBoxName.Text, TextBoxFirstName.Text, TextBoxCompany.Text, TextBoxPhone.Text);
                     TextBoxMail.Text = TextBoxPhone.Text = TextBoxName.Text = String.Empty;
