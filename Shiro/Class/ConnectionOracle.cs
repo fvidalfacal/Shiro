@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Data;
 using System.Linq;
-using System.Windows;
 
 using Oracle.ManagedDataAccess.Client;
 
@@ -89,7 +88,7 @@ namespace Shiro.Class
             Command.ExecuteNonQuery();
         }
 
-        private static Int32 sizeOf(IDbCommand command)
+        public static Int32 sizeOf(IDbCommand command)
         {
             return Convert.ToInt32(command.ExecuteScalar());
         }

@@ -21,8 +21,8 @@ namespace Shiro
         {
             var userPasswordEncrypted = SHA1Util.SHA1HashStringForUTF8String(password.Password);
             //TODO : SQL SERVER
-            //var command = Connection.Command(String.Format("SELECT LOGIN, PASSWORD FROM SALESMAN WHERE LOGIN = {0} AND PASSWORD = {1}", login.Text, userPasswordEncrypted));
             var command = ConnectionOracle.sizeOf(String.Format("SELECT LOGIN, PASSWORD FROM SALESMAN WHERE LOGIN = '{0}' AND PASSWORD = '{1}'", login.Text, userPasswordEncrypted));
+            //var command = Connection.Command(String.Format("SELECT LOGIN, PASSWORD FROM SALESMAN WHERE LOGIN = {0} AND PASSWORD = {1}", login.Text, userPasswordEncrypted));
             if(command == 1)
             {
                 var Index = new Index();
