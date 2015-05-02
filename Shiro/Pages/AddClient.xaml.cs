@@ -44,8 +44,8 @@ namespace Shiro.Pages
             var resultat = command.ExecuteReader();
             while (resultat.Read())
             {
-                showCustomer(Convert.ToInt32(resultat["ID_CUSTOMER"]), resultat["CUSTOMER"].ToString(), resultat["TELEPHONE"].ToString(),
-                    resultat["MAIL"].ToString());
+                showCustomer(Convert.ToInt32(resultat["ID_CUSTOMER"]), resultat["MAIL"].ToString(), resultat["NAME"].ToString(), resultat["FIRSTNAME"].ToString(), resultat["COMPANY"].ToString(),
+                    resultat["TELEPHONE"].ToString());
             }
         }
 
@@ -99,10 +99,9 @@ namespace Shiro.Pages
                     var querySelect = String.Format("SELECT max(ID_{0}) FROM {0}", "CUSTOMER");
                     var Command = ConnectionOracle.Command(querySelect).ExecuteScalar();
                     var idCustomer = Command.ToString() == String.Empty ? 1 : Convert.ToInt32(Command) + 1;
-                    MessageBox.Show("4");
-                    ConnectionOracle.Insert("CUSTOMER", idCustomer, TextBoxName.Text, TextBoxName.Text, TextBoxName.Text, TextBoxMail.Text, TextBoxPhone.Text);
-                    ModernDialog.ShowMessage("Utilisateur " + TextBoxName.Text + " ajouté avec succès", "Succès", MessageBoxButton.OK);
-                    showCustomer(idCustomer, TextBoxMail.Text, TextBoxName.Text, TextBoxPhone.Text);
+                    ConnectionOracle.Insert("CUSTOMER", idCustomer, TextBoxFirstName.Text, TextBoxName.Text, TextBoxCompany.Text, TextBoxMail.Text, TextBoxPhone.Text);
+                    ModernDialog.ShowMessage("Utilisateur " + TextBoxName.Text + TextBoxFirstName.Text +" ajouté avec succès", "Succès", MessageBoxButton.OK);
+                    showCustomer(idCustomer, TextBoxMail.Text, TextBoxName.Text, TextBoxFirstName.Text, TextBoxCompany.Text, TextBoxPhone.Text);
                     TextBoxMail.Text = TextBoxPhone.Text = TextBoxName.Text = String.Empty;
                 }
                 else
@@ -116,15 +115,10 @@ namespace Shiro.Pages
             }
         }
 
-        private void showCustomer(int ID, string Mail, string Name, string Phone)
+        private void showCustomer(int ID, string Mail, string Name, string FirstName, string company, string Phone)
         {
             var panelCustomer = new StackPanel();
             var thick = new Thickness(5, 2, 0, 0);
-
-            //TODO :
-            string firstname = "test";
-            string company = "test";
-
 
             // New border
             var border = new Border
@@ -160,7 +154,7 @@ namespace Shiro.Pages
 
             panelCustomer.Children.Add(BTN_Delete);
             BTN_Delete.Click += BTN_Delete_Click;
-            var newCustomer = new CUSTOMER(ID, Phone, Name, firstname, Mail, company);
+            var newCustomer = new CUSTOMER(ID, Phone, Name, FirstName, Mail, company);
             PanelCustomer.Children.Add(border);
             newCustomer.Border = border;
             ListCustomer.Add(newCustomer);
