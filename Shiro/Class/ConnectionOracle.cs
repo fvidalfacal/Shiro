@@ -88,6 +88,13 @@ namespace Shiro.Class
             Command.ExecuteNonQuery();
         }
 
+        public static Object GetFirst(string query)
+        {
+            var command = Command(query);
+            return command.ExecuteScalar();
+        }
+
+
         public static Int32 sizeOf(IDbCommand command)
         {
             return Convert.ToInt32(command.ExecuteScalar());

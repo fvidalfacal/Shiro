@@ -135,7 +135,6 @@
                              VerticalAlignment="Bottom"
                              BorderBrush="{DynamicResource Accent}"
                              Grid.IsSharedSizeScope="True"
-                             MaxLength="8"
                              MaxLines="1"
                              TabIndex="2"
                              TextChanged="TextBoxPhone_TextChanged"

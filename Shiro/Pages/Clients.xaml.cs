@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 using FirstFloor.ModernUI.Windows.Controls;
 
@@ -123,6 +124,19 @@ namespace Shiro.Pages
                 Height = 16
             });
 
+            // Button
+            var BTN_Delete = new Button
+            {
+                HorizontalAlignment = HorizontalAlignment.Right,
+                Content = "Supprimer le client",
+                Margin = new Thickness(9, -30, 67, 50),
+                BorderBrush = Brushes.Red,
+                Tag = newClient.ID_CUSTOMER
+            };
+
+            panelClient.Children.Add(BTN_Delete);
+            BTN_Delete.Click += BTN_Delete_Click;
+
             newClient.Border = border;
             ListClient.Add(newClient);
         }
@@ -165,6 +179,20 @@ namespace Shiro.Pages
             }
         }
 
+        private void BTN_Delete_Click(object sender, EventArgs e)
+        {
+            var ID = ((Button)sender).Tag.ToString();
+            var query = String.Format("SELECT {0} FROM {1} WHERE ID_{1} = {2}", "NAME", "CUSTOMER", ID);
+            var name = ConnectionOracle.Command(query);
+            if (ModernDialog.ShowMessage("Supprimer le client " + name, "Etes vous sur ?", MessageBoxButton.YesNo)
+               != MessageBoxResult.Yes)
+            {
+                return;
+            }
+            ConnectionOracle.Delete("APPOINTMENT", ID, "CUSTOMER");
+            ConnectionOracle.Delete("CUSTOMER", ID);
+            SelectMarchandiseLike(String.Empty);
+        }
         
     }
 }

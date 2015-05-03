@@ -49,6 +49,12 @@ namespace Shiro.Class
         }
 
 
+        public static Object GetFirst(string query)
+        {
+            var command = Command(query);
+            return command.ExecuteScalar();
+        }
+
         /// <summary>
         /// 
         /// </summary>

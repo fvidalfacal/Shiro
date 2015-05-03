@@ -69,10 +69,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Compile Include="Class\Appointment.cs" />
     <Compile Include="Class\Connection.cs" />
     <Compile Include="Class\ConnectionOracle.cs" />
     <Compile Include="Class\Customer.cs" />
+    <Compile Include="Class\Salesman.cs" />
     <Compile Include="Class\SHA1Util.cs" />
+    <Compile Include="ComboBox\ComboboxItemSalesMan.cs" />
     <Compile Include="Index.xaml.cs">
       <DependentUpon>Index.xaml</DependentUpon>
     </Compile>
@@ -106,6 +109,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
