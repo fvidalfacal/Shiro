@@ -75,17 +75,24 @@ namespace Shiro.Pages
                             Child = panelAppoint,
                             Height = 70
                         };
-                        
-                        var name = ((ComboboxItemSalesMan) ComboBoxSalesMan.SelectedItem).Value.NAME + " "
-                                   + ((ComboboxItemSalesMan) ComboBoxSalesMan.SelectedItem).Value.FIRSTNAME;
 
-                        // SalesMan's name
+                        var name = String.Empty;
+                        var queryName = String.Format("SELECT {0}, {1} FROM {2} WHERE {3} = {4}", "NAME", "FIRSTNAME", "CUSTOMER", "ID_CUSTOMER", resultatAppointment["ID_CUSTOMER"]);
+                        var CommandName = ConnectionOracle.Command(queryName);
+                        var resultatName = CommandName.ExecuteReader();
+                        while (resultatName.Read())
+                        {
+                            name = String.Format("{0} {1}", resultatName["NAME"], resultatName["FIRSTNAME"]);
+                        }
+
+                        
+                        // CUSTOMER's name
                         panelAppoint.Children.Add(new TextBlock { Margin = thick, Text = name, Height = 16 });
 
                         // Day
                         panelAppoint.Children.Add(new TextBlock
                         {
-                            Text = "Date : " + resultatAppointment["DAY"],
+                            Text = "Date : " + resultatAppointment["DAY"].ToString().Split(new[] { ' ' })[0],
                             Margin = thick,
                             Height = 16
                         });
