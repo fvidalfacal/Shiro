@@ -150,12 +150,16 @@ namespace Shiro.Pages
         private void DisplayAll()
         {
             PanelClient.Children.Clear();
+            ListClient.Clear();
+            SecondListClient.Clear();
             var command = Connection.GetAll("CUSTOMER");
             var resultat = command.ExecuteReader();
             while (resultat.Read())
             {
                 var client = new Customer(Convert.ToInt32(resultat["ID_CUSTOMER"]), resultat["TELEPHONE"].ToString(), resultat["NAME"].ToString(),
                         resultat["FIRSTNAME"].ToString(), resultat["MAIL"].ToString(), resultat["COMPANY"].ToString());
+                ListClient.Add(client);
+                SecondListClient.Add(client);
                 Display(client);
             }
         }
