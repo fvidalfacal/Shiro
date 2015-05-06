@@ -79,13 +79,13 @@ namespace Shiro.Pages
             TextChanged();
         }
 
-        private static Boolean IsInt(string str)
+        private static bool IsInt(string str)
         {
             int value;
             return (str.Trim() != string.Empty) && int.TryParse(str, out value);
         }
 
-        private static Boolean ValidMail(string mailString)
+        private static bool ValidMail(string mailString)
         {
             try
             {
@@ -100,8 +100,8 @@ namespace Shiro.Pages
 
         private void TextChanged()
         {
-            BtnAdd.IsEnabled = TextBoxMail.Text != String.Empty && ValidMail(TextBoxMail.Text) && TextBoxName.Text != String.Empty
-                               && TextBoxFirstName.Text != String.Empty && TextBoxCompany.Text != String.Empty && IsInt(TextBoxPhone.Text);
+            BtnAdd.IsEnabled = TextBoxMail.Text != string.Empty && ValidMail(TextBoxMail.Text) && TextBoxName.Text != string.Empty
+                               && TextBoxFirstName.Text != string.Empty && TextBoxCompany.Text != string.Empty && IsInt(TextBoxPhone.Text);
         }
 
         private void BtnAdd_Click(object sender, RoutedEventArgs e)

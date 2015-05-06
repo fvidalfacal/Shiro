@@ -7,7 +7,6 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Net.Mail;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -15,6 +14,7 @@ using System.Windows.Media;
 using FirstFloor.ModernUI.Windows.Controls;
 
 using Shiro.Class;
+using Shiro.ComboBox;
 
 namespace Shiro.Pages
 {
@@ -37,10 +37,57 @@ namespace Shiro.Pages
             }
         }
 
+        private void AppointmentPage_Initialized(object sender, EventArgs e)
+        {
+            TimePicker.AddTime(24, TimePickerDebutHeure);
+            TimePicker.AddTime(24, TimePickerFinHeure);
+            TimePicker.AddTime(60, TimePickerDebutMin);
+            TimePicker.AddTime(60, TimePickerFinMin);
+        }
+
         private void Appointment_Loaded(object sender, RoutedEventArgs e)
         {
+            ComboBoxClient.Items.Clear();
+            ComboboxSalesMan.Items.Clear();
+
+            try
+            {
+                var commandSalesman = Connection.GetAll("SALESMAN");
+                var resultatSalesman = commandSalesman.ExecuteReader();
+                while (resultatSalesman.Read())
+                {
+                    var text = string.Format("{0} {1}", resultatSalesman["FIRSTNAME"], resultatSalesman["NAME"]);
+                    ComboboxSalesMan.Items.Add(new ComboboxItemSalesMan
+                    {
+                        Text = text,
+                        Value =
+                            new SalesMan(Convert.ToInt32(resultatSalesman["ID_SALESMAN"]), resultatSalesman["TELEPHONE"].ToString(), resultatSalesman["NAME"].ToString(),
+                                resultatSalesman["FIRSTNAME"].ToString(), resultatSalesman["MAIL"].ToString())
+                    });
+                }
+                resultatSalesman.Close();
+                var commandClient = Connection.GetAll("CUSTOMER");
+                var resultatClient = commandClient.ExecuteReader();
+                while (resultatClient.Read())
+                {
+                    var text = string.Format("{0} {1}", resultatClient["FIRSTNAME"], resultatClient["NAME"]);
+                    ComboBoxClient.Items.Add(new ComboboxItemCustomer
+                    {
+                        Text = text,
+                        Value =
+                            new Customer(Convert.ToInt32(resultatClient["ID_CUSTOMER"]), resultatClient["TELEPHONE"].ToString(), resultatClient["NAME"].ToString(),
+                                resultatClient["FIRSTNAME"].ToString(), resultatClient["MAIL"].ToString(), resultatClient["COMPANY"].ToString())
+                    });
+                }
+                resultatClient.Close();
+            }
+            catch
+            {
+                ModernDialog.ShowMessage("Connection à la base de donnéess impossible", "Erreur", MessageBoxButton.OK);
+            }
+
             DatePickerAppoint.Text = DateTime.Now.ToString(CultureInfo.InvariantCulture);
-            //
+
             DisplayAll();
         }
 
@@ -56,13 +103,10 @@ namespace Shiro.Pages
             }
         }
 
-        private void TextBoxMail_TextChanged(object sender, TextChangedEventArgs e)
+        private void Combobox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             TextChanged();
         }
-
-        private void ComboboxSalesMan_SelectionChanged(object sender, SelectionChangedEventArgs e) { }
-        private void ComboBoxClient_SelectionChanged(object sender, SelectionChangedEventArgs e) { }
 
         private void DatePickerDateChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -74,41 +118,20 @@ namespace Shiro.Pages
             DatePickerAppoint.Text = DateTime.Now.ToString(CultureInfo.InvariantCulture);
         }
 
-        private void TextBoxPhone_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            TextChanged();
-        }
-
-        private static Boolean IsInt(string str)
-        {
-            int value;
-            return (str.Trim() != string.Empty) && int.TryParse(str, out value);
-        }
-
-        private static Boolean ValidMail(string mailString)
-        {
-            try
-            {
-                new MailAddress(mailString);
-                return true;
-            }
-            catch(FormatException)
-            {
-                return false;
-            }
-        }
 
         private void TextChanged()
         {
-            BtnAdd.IsEnabled = TextBoxMail.Text != String.Empty && ValidMail(TextBoxMail.Text)
-                               && IsInt(TextBoxPhone.Text);
+            BtnAdd.IsEnabled = TimePickerFinMin.Text != string.Empty && TimePickerFinHeure.Text != string.Empty && TimePickerDebutHeure.Text != string.Empty
+                            && TimePickerDebutMin.Text != string.Empty && ComboBoxClient.Text != string.Empty && ComboboxSalesMan.Text != string.Empty;
+            //MessageBox.Show(TimePickerFinMin.Text +" ,"+ TimePickerFinHeure.Text +" ,"+ TimePickerDebutHeure.Text 
+            //    +" ,"+  TimePickerDebutMin.Text +" ,"+  ComboBoxClient.Text+" ,"+ ComboboxSalesMan.Text );
         }
 
         private void BtnAdd_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                var queryVerify = String.Format("SELECT * FROM {0} WHERE {1} = '{2}' OR {3} = '{4}'", "CUSTOMER", "TELEPHONE", TextBoxPhone.Text, "MAIL",
+                /*var queryVerify = String.Format("SELECT * FROM {0} WHERE {1} = '{2}' OR {3} = '{4}'", "CUSTOMER", "TELEPHONE", TextBoxPhone.Text, "MAIL",
                     TextBoxMail.Text);
                 if(Connection.SizeOf(queryVerify) == 0)
                 {
@@ -123,7 +146,7 @@ namespace Shiro.Pages
                 else
                 {
                     ModernDialog.ShowMessage("Ce client existe deja", "Erreur", MessageBoxButton.OK);
-                }
+                }*/
             }
             catch
             {
@@ -192,5 +215,7 @@ namespace Shiro.Pages
             Connection.Delete("CUSTOMER", where);
             DisplayAll();
         }
+
+        
     }
 }

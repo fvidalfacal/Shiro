@@ -8,7 +8,7 @@ using Shiro.Class;
 
 namespace Shiro.ComboBox
 {
-    internal class ComboboxItemSalesMan
+    internal sealed class ComboboxItemSalesMan
     {
         public string Text { private get; set; }
         public SalesMan Value { get; set; }

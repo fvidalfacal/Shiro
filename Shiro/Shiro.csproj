@@ -81,6 +81,8 @@
     <Compile Include="Class\Customer.cs" />
     <Compile Include="Class\Salesman.cs" />
     <Compile Include="Class\SHA1Util.cs" />
+    <Compile Include="Class\TimePicker.cs" />
+    <Compile Include="ComboBox\ComboboxItemCustomer.cs" />
     <Compile Include="ComboBox\ComboboxItemSalesMan.cs" />
     <Compile Include="Index.xaml.cs">
       <DependentUpon>Index.xaml</DependentUpon>
