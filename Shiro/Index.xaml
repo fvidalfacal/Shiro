@@ -9,15 +9,20 @@
                   IsTitleVisible="True"
                   ToolTip="{DynamicResource {x:Type ToolTip}}">
     <mui:ModernWindow.MenuLinkGroups>
-        <mui:LinkGroup DisplayName="Gestion des clients">
+        <mui:LinkGroup DisplayName="Clients">
             <mui:LinkGroup.Links>
                 <mui:Link DisplayName="Ajouter un client" Source="Pages/AddClient.xaml" />
                 <mui:Link DisplayName="Voir la liste des clients" Source="Pages/Clients.xaml" />
             </mui:LinkGroup.Links>
         </mui:LinkGroup>
-        <mui:LinkGroup DisplayName="Gestion des commerciaux">
+        <mui:LinkGroup DisplayName="Commerciaux">
             <mui:LinkGroup.Links>
                 <mui:Link DisplayName="Voir la liste des commerciaux" Source="Pages/Commerciaux.xaml" />
+            </mui:LinkGroup.Links>
+        </mui:LinkGroup>
+        <mui:LinkGroup DisplayName="Rendez-vous">
+            <mui:LinkGroup.Links>
+                <mui:Link DisplayName="Ajouter un rendez vous" Source="Pages/appointment.xaml" />
             </mui:LinkGroup.Links>
         </mui:LinkGroup>
     </mui:ModernWindow.MenuLinkGroups>

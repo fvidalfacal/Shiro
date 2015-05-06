@@ -9,7 +9,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Documents;
 using System.Windows.Media;
 
 using FirstFloor.ModernUI.Windows.Controls;
@@ -42,8 +41,8 @@ namespace Shiro.Pages
                 {
                     continue;
                 }
-                var ID = SecondListClient[i].IdCustomer;
-                var newClient = new Customer(ID, SecondListClient[i].Telephone, SecondListClient[i].Name, SecondListClient[i].Firstname,
+                var id = SecondListClient[i].IdCustomer;
+                var newClient = new Customer(id, SecondListClient[i].Telephone, SecondListClient[i].Name, SecondListClient[i].Firstname,
                     SecondListClient[i].Mail, SecondListClient[i].Company);
                 Display(newClient);
             }
@@ -154,10 +153,10 @@ namespace Shiro.Pages
             SecondListClient.Clear();
             var command = Connection.GetAll("CUSTOMER");
             var resultat = command.ExecuteReader();
-            while (resultat.Read())
+            while(resultat.Read())
             {
                 var client = new Customer(Convert.ToInt32(resultat["ID_CUSTOMER"]), resultat["TELEPHONE"].ToString(), resultat["NAME"].ToString(),
-                        resultat["FIRSTNAME"].ToString(), resultat["MAIL"].ToString(), resultat["COMPANY"].ToString());
+                    resultat["FIRSTNAME"].ToString(), resultat["MAIL"].ToString(), resultat["COMPANY"].ToString());
                 ListClient.Add(client);
                 SecondListClient.Add(client);
                 Display(client);
@@ -185,10 +184,7 @@ namespace Shiro.Pages
             {
                 return;
             }
-            var where = new[,]
-                {
-                    {"ID_CUSTOMER", id}
-                };
+            var where = new[,] {{"ID_CUSTOMER", id}};
             Connection.Delete("APPOINTMENT", where);
             Connection.Delete("CUSTOMER", where);
             DisplayAll();

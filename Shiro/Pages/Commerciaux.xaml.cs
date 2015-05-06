@@ -22,11 +22,13 @@ namespace Shiro.Pages
     /// </summary>
     internal sealed partial class Commerciaux
     {
-        private static readonly List<Appointment> ListAppointment = new List<Appointment>();
+        private static readonly List<Class.Appointment> ListAppointment = new List<Class.Appointment>();
 
         private void ComboBoxSalesMan_Loaded(object sender, EventArgs e)
         {
             PanelSales.Children.Clear();
+            ListAppointment.Clear();
+            ComboBoxSalesMan.Items.Clear();
             ChangeVisibility(false);
             try
             {
@@ -61,7 +63,7 @@ namespace Shiro.Pages
                     var resultatAppointment = command2.ExecuteReader();
                     while(resultatAppointment.Read())
                     {
-                        var appointment = new Appointment(Convert.ToInt32(resultatAppointment["ID_APPOINTMENT"]),
+                        var appointment = new Class.Appointment(Convert.ToInt32(resultatAppointment["ID_APPOINTMENT"]),
                             Convert.ToInt32(resultatAppointment["ID_CUSTOMER"]), Convert.ToInt32(resultatAppointment["ID_SALESMAN"]),
                             resultatAppointment["DAY"].ToString(), resultatAppointment["STARTTIME"].ToString(), resultatAppointment["ENDTIME"].ToString());
 
@@ -217,9 +219,7 @@ namespace Shiro.Pages
             try
             {
                 var where = new[,]
-                {
-                    {"ID_SALESMAN", ((ComboboxItemSalesMan) ComboBoxSalesMan.SelectedItem).Value.IdSalesman.ToString(CultureInfo.InvariantCulture)}
-                };
+                {{"ID_SALESMAN", ((ComboboxItemSalesMan) ComboBoxSalesMan.SelectedItem).Value.IdSalesman.ToString(CultureInfo.InvariantCulture)}};
                 Connection.Delete("APPOINTMENT", where);
                 Connection.Delete("SALESMAN", where);
             }

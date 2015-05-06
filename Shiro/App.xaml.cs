@@ -11,5 +11,5 @@ namespace Shiro
     /// <summary>
     ///   Interaction logic for App.xaml
     /// </summary>
-    public partial class App : Application {}
+    internal partial class App : Application {}
 }

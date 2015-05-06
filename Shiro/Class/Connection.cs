@@ -7,7 +7,6 @@
 using System;
 using System.Data;
 using System.Linq;
-using System.Windows;
 
 using Oracle.ManagedDataAccess.Client;
 
@@ -63,7 +62,7 @@ namespace Shiro.Class
         {
             var queryWhere = String.Empty;
             var size = value.Length / 2;
-            for (var i = 0; i < size; i++)
+            for(var i = 0; i < size; i++)
             {
                 queryWhere += String.Format("{0} = '{1}' ,", value[i, 0], value[i, 1]);
             }
@@ -73,7 +72,8 @@ namespace Shiro.Class
             command.ExecuteNonQuery();
         }
 
-        /// <summary>+
+        /// <summary>
+        ///   +
         /// </summary>
         /// <param name="tableQuery">string : Nom de la table</param>
         /// <param name="id">id de l'object a modifier</param>

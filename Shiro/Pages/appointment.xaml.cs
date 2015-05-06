@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Net.Mail;
 using System.Windows;
 using System.Windows.Controls;
@@ -18,16 +19,16 @@ using Shiro.Class;
 namespace Shiro.Pages
 {
     /// <summary>
-    ///   Interaction logic for AddClient.xaml
+    ///   Interaction logic for rdv.xaml
     /// </summary>
-    internal sealed partial class AddClient
+    internal sealed partial class Appointment
     {
         private static readonly List<Customer> ListCustomer = new List<Customer>();
 
-        private void UserControl_SizeChanged(object sender, SizeChangedEventArgs e)
+        private void Appointment_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            BorderCustomer.Width = CustomerCreator.ActualWidth - 340;
-            BorderCustomer.Height = CustomerCreator.ActualHeight - 70;
+            BorderCustomer.Width = AppointmentPage.ActualWidth - 340;
+            BorderCustomer.Height = AppointmentPage.ActualHeight - 70;
 
             var nbCustomer = ListCustomer.Count;
             for(var i = 0; i < nbCustomer; i++)
@@ -36,8 +37,9 @@ namespace Shiro.Pages
             }
         }
 
-        private void CustomerCreator_Loaded(object sender, RoutedEventArgs e)
+        private void Appointment_Loaded(object sender, RoutedEventArgs e)
         {
+            DatePickerAppoint.Text = DateTime.Now.ToString(CultureInfo.InvariantCulture);
             //
             DisplayAll();
         }
@@ -59,19 +61,17 @@ namespace Shiro.Pages
             TextChanged();
         }
 
-        private void TextBoxFirstName_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            TextChanged();
-        }
+        private void ComboboxSalesMan_SelectionChanged(object sender, SelectionChangedEventArgs e) { }
+        private void ComboBoxClient_SelectionChanged(object sender, SelectionChangedEventArgs e) { }
 
-        private void TextBoxCompany_TextChanged(object sender, TextChangedEventArgs e)
+        private void DatePickerDateChanged(object sender, SelectionChangedEventArgs e)
         {
-            TextChanged();
-        }
-
-        private void TextBoxName_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            TextChanged();
+            var result = DateTime.Compare(Convert.ToDateTime(DatePickerAppoint.Text), DateTime.Now);
+            if(result >= 0)
+            {
+                return;
+            }
+            DatePickerAppoint.Text = DateTime.Now.ToString(CultureInfo.InvariantCulture);
         }
 
         private void TextBoxPhone_TextChanged(object sender, TextChangedEventArgs e)
@@ -100,8 +100,8 @@ namespace Shiro.Pages
 
         private void TextChanged()
         {
-            BtnAdd.IsEnabled = TextBoxMail.Text != String.Empty && ValidMail(TextBoxMail.Text) && TextBoxName.Text != String.Empty
-                               && TextBoxFirstName.Text != String.Empty && TextBoxCompany.Text != String.Empty && IsInt(TextBoxPhone.Text);
+            BtnAdd.IsEnabled = TextBoxMail.Text != String.Empty && ValidMail(TextBoxMail.Text)
+                               && IsInt(TextBoxPhone.Text);
         }
 
         private void BtnAdd_Click(object sender, RoutedEventArgs e)
@@ -115,10 +115,10 @@ namespace Shiro.Pages
                     var querySelect = String.Format("SELECT max(ID_{0}) FROM {0}", "CUSTOMER");
                     var command = Connection.GetFirst(querySelect);
                     var idCustomer = command.ToString() == String.Empty ? 1 : Convert.ToInt32(command) + 1;
-                    Connection.Insert("CUSTOMER", idCustomer, TextBoxFirstName.Text, TextBoxName.Text, TextBoxCompany.Text, TextBoxPhone.Text, TextBoxMail.Text);
-                    ModernDialog.ShowMessage("Utilisateur " + TextBoxName.Text + TextBoxFirstName.Text + " ajouté avec succès", "Succès", MessageBoxButton.OK);
-                    ShowCustomer(idCustomer, TextBoxMail.Text, TextBoxName.Text, TextBoxFirstName.Text, TextBoxCompany.Text, TextBoxPhone.Text);
-                    TextBoxMail.Text = TextBoxPhone.Text = TextBoxName.Text = TextBoxCompany.Text = TextBoxFirstName.Text = String.Empty;
+                    //Connection.Insert("CUSTOMER", idCustomer, TextBoxFirstName.Text, DatePickerAppoint.Text, TextBoxCompany.Text, TextBoxPhone.Text, TextBoxMail.Text);
+                    //ModernDialog.ShowMessage("Utilisateur " + DatePickerAppoint.Text + TextBoxFirstName.Text + " ajouté avec succès", "Succès", MessageBoxButton.OK);
+                    //ShowCustomer(idCustomer, TextBoxMail.Text, DatePickerAppoint.Text, TextBoxFirstName.Text, TextBoxCompany.Text, TextBoxPhone.Text);
+                    //TextBoxMail.Text = TextBoxPhone.Text = DatePickerAppoint.Text = TextBoxCompany.Text = TextBoxFirstName.Text = String.Empty;
                 }
                 else
                 {
