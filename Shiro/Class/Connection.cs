@@ -1,86 +1,84 @@
 ﻿// This program is a private software, based on c# source code.
 // To sell or change credits of this software is forbidden,
-// except if someone approve it from MANAGER INC. team.
+// except if someone approve it from Shiro INC. team.
 //  
-// Copyrights (c) 2014 MANAGER INC. All rights reserved.
+// Copyrights (c) 2014 Shiro INC. All rights reserved.
 
 using System;
 using System.Data;
-using System.Data.SqlClient;
 using System.Linq;
+using System.Windows;
+
+using Oracle.ManagedDataAccess.Client;
 
 namespace Shiro.Class
 {
-
-    public class Connection
+    internal sealed class Connection
     {
-        private static SqlConnection ConnectionSql;
-        private static Boolean ConnectionIsStarted;
+        private static OracleConnection _connectionOrcl;
+        private static Boolean _connectionIsStarted;
 
         private Connection()
         {
-            ConnectionSql = new SqlConnection("Data Source=FLORIAN-PC; Initial Catalog=Shiro; User id=Florian-PC/Florian;Password=pwsio;");
-            ConnectionSql.Open();
-            ConnectionIsStarted = true;
+            _connectionOrcl = new OracleConnection("user id=SHIRO;password=pw;data source=localhost:1521/xe");
+            _connectionOrcl.Open();
+            _connectionIsStarted = true;
         }
 
-        private static SqlConnection GetConnection()
+        private static OracleConnection GetConnection()
         {
-            if(!ConnectionIsStarted)
+            if(!_connectionIsStarted)
             {
                 new Connection();
             }
-            return ConnectionSql;
+            return _connectionOrcl;
         }
 
-        public static SqlCommand Command(string query)
+        internal static OracleCommand Command(string query)
         {
-            return new SqlCommand {Connection = GetConnection(), CommandText = query};
+            return new OracleCommand {Connection = GetConnection(), CommandText = query};
         }
 
-        public static SqlCommand CommandStored(string query)
+        public static OracleCommand CommandStored(string query)
         {
-            return new SqlCommand {CommandType = CommandType.StoredProcedure, Connection = GetConnection(), CommandText = query};
+            return new OracleCommand {CommandType = CommandType.StoredProcedure, Connection = GetConnection(), CommandText = query};
         }
 
-        public static SqlCommand GetAll(string tableQuery)
+        internal static OracleCommand GetAll(string tableQuery)
         {
             return Command(String.Format("SELECT * FROM {0}", tableQuery));
         }
 
-
-        public static Object GetFirst(string query)
-        {
-            var command = Command(query);
-            return command.ExecuteScalar();
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="tableQuery">string : Nom de la table</param>
-        /// <param name="value">Tableau de string à double entré {{"nom de la colonne","valeur"}{"nom de la colonne","valeur"}}</param>
-        public static void Insert(string tableQuery, params Object[] value)
+        internal static void Insert(string tableQuery, params Object[] value)
         {
             var query = value.Aggregate(String.Empty, (current, field) => current + ("'" + field + "',"));
             query = query.Substring(0, query.Length - 1);
             var queryInsert = String.Format("INSERT INTO {0} VALUES ({1})", tableQuery, query);
-            var Command = Connection.Command(queryInsert);
-            Command.Prepare();
-            Command.ExecuteNonQuery();
+            var command = Command(queryInsert);
+            command.Prepare();
+            command.ExecuteNonQuery();
         }
 
-        public static void Delete(string tableQuery, object ID, string param = null)
+        public static void Delete(string tableQuery, String[,] value)
         {
-            var Id_Table = String.Empty;
-            Id_Table = param ?? tableQuery;
-            var query = String.Format("DELETE FROM {0} WHERE ID_{1} = {2}", tableQuery, Id_Table, ID);
-            var Command = Connection.Command(query);
-            Command.Prepare();
-            Command.ExecuteNonQuery();
+            var queryWhere = String.Empty;
+            var size = value.Length / 2;
+            for (var i = 0; i < size; i++)
+            {
+                queryWhere += String.Format("{0} = '{1}' ,", value[i, 0], value[i, 1]);
+            }
+            var query = String.Format("DELETE FROM {0} WHERE {1}", tableQuery, queryWhere.Substring(0, queryWhere.Length - 1));
+            var command = Command(query);
+            command.Prepare();
+            command.ExecuteNonQuery();
         }
 
-        public static void Update(string tableQuery, int ID, String[,] value)
+        /// <summary>+
+        /// </summary>
+        /// <param name="tableQuery">string : Nom de la table</param>
+        /// <param name="id">id de l'object a modifier</param>
+        /// <param name="value">Tableau de string à double entré {{"nom de la colonne","valeur"}{"nom de la colonne","valeur"}}</param>
+        public static void Update(string tableQuery, int id, String[,] value)
         {
             var query = String.Empty;
             var size = value.Length / 2;
@@ -88,20 +86,26 @@ namespace Shiro.Class
             {
                 query += String.Format("{0} = '{1}' ,", value[i, 0], value[i, 1]);
             }
-            query = String.Format("UPDATE {0} SET {2} WHERE ID_{0} = {1}", tableQuery, ID, query.Substring(0, query.Length - 1));
-            var Command = Connection.Command(query);
-            Command.Prepare();
-            Command.ExecuteNonQuery();
+            query = String.Format("UPDATE {0} SET {2} WHERE ID_{0} = {1}", tableQuery, id, query.Substring(0, query.Length - 1));
+            var command = Command(query);
+            command.Prepare();
+            command.ExecuteNonQuery();
         }
 
-        public static Int32 sizeOf(IDbCommand command)
+        public static Object GetFirst(string query)
+        {
+            var command = Command(query);
+            return command.ExecuteScalar();
+        }
+
+        private static Int32 SizeOf(IDbCommand command)
         {
             return Convert.ToInt32(command.ExecuteScalar());
         }
 
-        public static Int32 sizeOf(string query)
+        public static Int32 SizeOf(string query)
         {
-            return sizeOf(Command(String.Format("SELECT COUNT(*) FROM {0}", query)));
+            return SizeOf(Command(String.Format("SELECT COUNT(*) FROM ({0})", query)));
         }
     }
 }

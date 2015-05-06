@@ -1,4 +1,10 @@
-﻿using System;
+﻿// This program is a private software, based on c# source code.
+// To sell or change credits of this software is forbidden,
+// except if someone approve it from Shiro INC. team.
+//  
+// Copyrights (c) 2014 Shiro INC. All rights reserved.
+
+using System;
 using System.Windows;
 
 using FirstFloor.ModernUI.Windows.Controls;
@@ -8,7 +14,7 @@ using Shiro.Class;
 namespace Shiro
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    ///   Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow
     {
@@ -21,12 +27,14 @@ namespace Shiro
         {
             var userPasswordEncrypted = SHA1Util.SHA1HashStringForUTF8String(password.Password);
             //TODO : SQL SERVER
-            var command = ConnectionOracle.sizeOf(String.Format("SELECT LOGIN, PASSWORD FROM SALESMAN WHERE LOGIN = '{0}' AND PASSWORD = '{1}'", login.Text, userPasswordEncrypted));
+            var command =
+                Connection.SizeOf(String.Format("SELECT LOGIN, PASSWORD FROM SALESMAN WHERE LOGIN = '{0}' AND PASSWORD = '{1}'", login.Text,
+                    userPasswordEncrypted));
             //var command = Connection.Command(String.Format("SELECT LOGIN, PASSWORD FROM SALESMAN WHERE LOGIN = {0} AND PASSWORD = {1}", login.Text, userPasswordEncrypted));
             if(command == 1)
             {
-                var Index = new Index();
-                Index.Show();
+                var index = new Index();
+                index.Show();
                 Close();
             }
             else

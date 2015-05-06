@@ -1,25 +1,31 @@
-﻿using System.Windows.Controls;
+﻿// This program is a private software, based on c# source code.
+// To sell or change credits of this software is forbidden,
+// except if someone approve it from Shiro INC. team.
+//  
+// Copyrights (c) 2014 Shiro INC. All rights reserved.
+
+using System.Windows.Controls;
 
 namespace Shiro.Class
 {
-    class CUSTOMER
+    internal sealed class Customer
     {
-        public int ID_CUSTOMER { get; set; }
-        public string TELEPHONE { get; set; }
-        public string NAME { get; set; }
-        public string FIRSTNAME { get; set; }
-        public string MAIL { get; set; }
-        public string COMPANY { get; set; }
-        public Border Border { get; set; }
-
-        public CUSTOMER(int ID, string TELEPHONE, string NAME, string FIRSTNAME, string MAIL, string COMPANY)
+        public Customer(int id, string telephone, string name, string firstname, string mail, string company)
         {
-            ID_CUSTOMER = ID;
-            this.TELEPHONE = TELEPHONE;
-            this.NAME = NAME;
-            this.FIRSTNAME = FIRSTNAME;
-            this.MAIL = MAIL;
-            this.COMPANY = COMPANY;
+            IdCustomer = id;
+            Telephone = telephone;
+            Name = name;
+            Firstname = firstname;
+            Mail = mail;
+            Company = company;
         }
+
+        public int IdCustomer { get; private set; }
+        public string Telephone { get; private set; }
+        public string Name { get; private set; }
+        public string Firstname { get; private set; }
+        public string Mail { get; private set; }
+        public string Company { get; private set; }
+        public Border Border { get; set; }
     }
 }

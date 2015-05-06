@@ -8,6 +8,7 @@
              SizeChanged="UserControl_SizeChanged"
              d:DesignHeight="300"
              d:DesignWidth="300"
+             x:ClassModifier="internal"
              mc:Ignorable="d">
     <Grid Style="{StaticResource ContentRoot}">
         <Grid.ColumnDefinitions>
@@ -105,7 +106,7 @@
                              BorderBrush="{DynamicResource Accent}"
                              Grid.IsSharedSizeScope="True"
                              TabIndex="2"
-                             TextChanged="TextBoxMail_TextChanged" />
+                             TextChanged="TextBoxFirstName_TextChanged" />
                     <Button x:Name="BtnAdd"
                             Grid.Row="1"
                             Grid.Column="2"
@@ -137,7 +138,7 @@
                              Grid.IsSharedSizeScope="True"
                              MaxLines="1"
                              TabIndex="2"
-                             TextChanged="TextBoxPhone_TextChanged"
+                             TextChanged="TextBoxCompany_TextChanged"
                              TextWrapping="Wrap" />
                     <TextBlock Grid.Row="1"
                                Grid.Column="0"

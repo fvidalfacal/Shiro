@@ -1,37 +1,42 @@
-﻿
+﻿// This program is a private software, based on c# source code.
+// To sell or change credits of this software is forbidden,
+// except if someone approve it from Shiro INC. team.
+//  
+// Copyrights (c) 2014 Shiro INC. All rights reserved.
+
 using System;
 using System.Windows.Controls;
 
 namespace Shiro.Class
 {
-    class Appointment
+    internal sealed class Appointment
     {
-        public int ID_CUSTOMER { get; set; }
-        public int ID_APPOINTMENT { get; set; }
-        public int ID_SALESMAN { get; set; }
-        public string DAY { get; set; }
-        public string STARTTIME { get; set; }
-        public string ENDTIME { get; set; }
-        public Border Border { get; set; }
-
-        public Appointment(int ID, int ID_CUSTOMER, int ID_SALESMAN, string DAY, string STARTTIME, string ENDTIME)
+        public Appointment(int id, int idCustomer, int idSalesman, string day, string starttime, string endtime)
         {
-            ID_APPOINTMENT = ID;
-            this.ID_CUSTOMER = ID_CUSTOMER;
-            this.ID_SALESMAN = ID_SALESMAN;
-            this.DAY = DAY;
-            this.STARTTIME = STARTTIME;
-            this.ENDTIME = ENDTIME;
+            IdAppointment = id;
+            IdCustomer = idCustomer;
+            IdSalesman = idSalesman;
+            Day = day;
+            Starttime = starttime;
+            Endtime = endtime;
         }
 
         public Appointment()
         {
-            ID_APPOINTMENT = 0;
-            ID_CUSTOMER = 0;
-            ID_SALESMAN = 0;
-            DAY = String.Empty;
-            STARTTIME = String.Empty;
-            ENDTIME = String.Empty;
+            IdAppointment = 0;
+            IdCustomer = 0;
+            IdSalesman = 0;
+            Day = String.Empty;
+            Starttime = String.Empty;
+            Endtime = String.Empty;
         }
+
+        public int IdCustomer { get; set; }
+        public int IdAppointment { get; set; }
+        public int IdSalesman { get; set; }
+        public string Day { get; set; }
+        public string Starttime { get; set; }
+        public string Endtime { get; set; }
+        public Border Border { get; set; }
     }
 }

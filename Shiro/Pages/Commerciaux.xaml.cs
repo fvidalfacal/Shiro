@@ -1,6 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿// This program is a private software, based on c# source code.
+// To sell or change credits of this software is forbidden,
+// except if someone approve it from Shiro INC. team.
+//  
+// Copyrights (c) 2014 Shiro INC. All rights reserved.
 
+using System;
+using System.Collections.Generic;
+using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -12,53 +18,52 @@ using Shiro.ComboBox;
 namespace Shiro.Pages
 {
     /// <summary>
-    /// Interaction logic for Commerciaux.xaml
+    ///   Interaction logic for Commerciaux.xaml
     /// </summary>
-    public partial class Commerciaux
+    internal sealed partial class Commerciaux
     {
         private static readonly List<Appointment> ListAppointment = new List<Appointment>();
 
         private void ComboBoxSalesMan_Loaded(object sender, EventArgs e)
         {
-            //Default Visibility 
-
             PanelSales.Children.Clear();
             ChangeVisibility(false);
             try
             {
-                ComboBoxSalesMan.Items.Clear();
                 InitComboClient();
             }
-            catch (Exception caught)
+            catch(Exception caught)
             {
                 Console.WriteLine(caught.Message);
-
             }
         }
 
         private void ComboBoxSalesMan_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if(ComboBoxSalesMan.Items.Count == 0)
+            {
+                return;
+            }
             PanelSales.Children.Clear();
             try
             {
-                TextMail.Text = ((ComboboxItemSalesMan)ComboBoxSalesMan.SelectedItem).Value.MAIL;
-                TextPhone.Text = ((ComboboxItemSalesMan)ComboBoxSalesMan.SelectedItem).Value.TELEPHONE;
+                TextMail.Text = ((ComboboxItemSalesMan) ComboBoxSalesMan.SelectedItem).Value.Mail;
+                TextPhone.Text = ((ComboboxItemSalesMan) ComboBoxSalesMan.SelectedItem).Value.Telephone;
 
-                var query = String.Format("SELECT DISTINCT {0} FROM {1} WHERE ID_{2} = {3} ORDER BY {0}", "ID_APPOINTMENT", "APPOINTMENT",
-                    "SALESMAN", ((ComboboxItemSalesMan)ComboBoxSalesMan.SelectedItem).Value.ID_SALESMAN);
-
-                var Command = ConnectionOracle.Command(query);
-                var resultCommand = Command.ExecuteReader();
-                while (resultCommand.Read())
+                var query = String.Format("SELECT DISTINCT {0} FROM {1} WHERE ID_{2} = {3} ORDER BY {0}", "ID_APPOINTMENT", "APPOINTMENT", "SALESMAN",
+                    ((ComboboxItemSalesMan) ComboBoxSalesMan.SelectedItem).Value.IdSalesman);
+                var command = Connection.Command(query);
+                var resultCommand = command.ExecuteReader();
+                while(resultCommand.Read())
                 {
                     var query2 = String.Format("APPOINTMENT WHERE ID_APPOINTMENT = {0}", resultCommand["ID_APPOINTMENT"]);
-                    var Command2 = ConnectionOracle.GetAll(query2);
-                    var resultatAppointment = Command2.ExecuteReader();
-                    while (resultatAppointment.Read())
+                    var command2 = Connection.GetAll(query2);
+                    var resultatAppointment = command2.ExecuteReader();
+                    while(resultatAppointment.Read())
                     {
-                        var Appointment = new Appointment(Convert.ToInt32(resultatAppointment["ID_APPOINTMENT"]), Convert.ToInt32(resultatAppointment["ID_CUSTOMER"]),
-                            Convert.ToInt32(resultatAppointment["ID_SALESMAN"]), resultatAppointment["DAY"].ToString(),
-                            resultatAppointment["STARTTIME"].ToString(), resultatAppointment["ENDTIME"].ToString());
+                        var appointment = new Appointment(Convert.ToInt32(resultatAppointment["ID_APPOINTMENT"]),
+                            Convert.ToInt32(resultatAppointment["ID_CUSTOMER"]), Convert.ToInt32(resultatAppointment["ID_SALESMAN"]),
+                            resultatAppointment["DAY"].ToString(), resultatAppointment["STARTTIME"].ToString(), resultatAppointment["ENDTIME"].ToString());
 
                         var panelAppoint = new StackPanel();
                         var thick = new Thickness(5, 2, 0, 0);
@@ -77,22 +82,22 @@ namespace Shiro.Pages
                         };
 
                         var name = String.Empty;
-                        var queryName = String.Format("SELECT {0}, {1} FROM {2} WHERE {3} = {4}", "NAME", "FIRSTNAME", "CUSTOMER", "ID_CUSTOMER", resultatAppointment["ID_CUSTOMER"]);
-                        var CommandName = ConnectionOracle.Command(queryName);
-                        var resultatName = CommandName.ExecuteReader();
-                        while (resultatName.Read())
+                        var queryName = String.Format("SELECT {0}, {1} FROM {2} WHERE {3} = {4}", "NAME", "FIRSTNAME", "CUSTOMER", "ID_CUSTOMER",
+                            resultatAppointment["ID_CUSTOMER"]);
+                        var commandName = Connection.Command(queryName);
+                        var resultatName = commandName.ExecuteReader();
+                        while(resultatName.Read())
                         {
                             name = String.Format("{0} {1}", resultatName["NAME"], resultatName["FIRSTNAME"]);
                         }
 
-                        
                         // CUSTOMER's name
-                        panelAppoint.Children.Add(new TextBlock { Margin = thick, Text = name, Height = 16 });
+                        panelAppoint.Children.Add(new TextBlock {Margin = thick, Text = name, Height = 16});
 
                         // Day
                         panelAppoint.Children.Add(new TextBlock
                         {
-                            Text = "Date : " + resultatAppointment["DAY"].ToString().Split(new[] { ' ' })[0],
+                            Text = "Date : " + resultatAppointment["DAY"].ToString().Split(new[] {' '})[0],
                             Margin = thick,
                             Height = 16
                         });
@@ -104,9 +109,9 @@ namespace Shiro.Pages
                             Height = 16
                         });
 
-                        Appointment.Border = bordure;
+                        appointment.Border = bordure;
                         PanelSales.Children.Add(bordure);
-                        ListAppointment.Add(Appointment);
+                        ListAppointment.Add(appointment);
                     }
                     resultatAppointment.Close();
                 }
@@ -115,7 +120,7 @@ namespace Shiro.Pages
             catch(Exception exception)
             {
                 MessageBox.Show(exception.Message);
-                ModernDialog.ShowMessage("Connection à la base de donnée impossible", "Erreur", MessageBoxButton.OK);
+                ModernDialog.ShowMessage("Connection à la base de données impossible", "Erreur", MessageBoxButton.OK);
             }
             finally
             {
@@ -153,25 +158,27 @@ namespace Shiro.Pages
         {
             try
             {
-                var oCommand = ConnectionOracle.GetAll("SALESMAN");
+                var oCommand = Connection.GetAll("SALESMAN");
                 var resultat = oCommand.ExecuteReader();
-                while (resultat.Read())
+                while(resultat.Read())
                 {
+                    var text = string.Format("{0} {1}", resultat["FIRSTNAME"], resultat["NAME"]);
                     ComboBoxSalesMan.Items.Add(new ComboboxItemSalesMan
                     {
-                        Text = resultat[2].ToString(),
-                        Value = new SalesMan(Convert.ToInt32(resultat["ID_SALESMAN"]), resultat["TELEPHONE"].ToString(), resultat["NAME"].ToString(), resultat["FIRSTNAME"].ToString(), resultat["MAIL"].ToString())
+                        Text = text,
+                        Value =
+                            new SalesMan(Convert.ToInt32(resultat["ID_SALESMAN"]), resultat["TELEPHONE"].ToString(), resultat["NAME"].ToString(),
+                                resultat["FIRSTNAME"].ToString(), resultat["MAIL"].ToString())
                     });
                 }
                 resultat.Close();
             }
             catch
             {
-                ModernDialog.ShowMessage("Connection à la base de donnée impossible", "Erreur", MessageBoxButton.OK);
+                ModernDialog.ShowMessage("Connection à la base de donnéess impossible", "Erreur", MessageBoxButton.OK);
             }
         }
 
-        
         private void MenuSalesMan_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             BorderSales.Width = MenuSalesMan.ActualWidth - 400;
@@ -179,15 +186,13 @@ namespace Shiro.Pages
             try
             {
                 var nbMarchandise = ListAppointment.Count;
-                for (var i = 0; i < nbMarchandise; i++)
+                for(var i = 0; i < nbMarchandise; i++)
                 {
                     ListAppointment[i].Border.Width = BorderSales.Width - 5;
                 }
             }
-            catch (Exception caught)
+            catch(Exception caught)
             {
-                //On initialisation it don't works so here's a try/catch.
-                //Need to figure out how to bypass it since it's not useful.
                 Console.WriteLine(caught.Message);
                 Console.Read();
             }
@@ -197,12 +202,11 @@ namespace Shiro.Pages
         {
             var nbSalesMan = ListAppointment.Count;
 
-            if (nbSalesMan == 0)
+            if(nbSalesMan == 0)
             {
                 return;
             }
-
-            for (var i = 0; i < nbSalesMan; i++)
+            for(var i = 0; i < nbSalesMan; i++)
             {
                 ListAppointment[i].Border.BorderBrush = BorderSales.BorderBrush;
             }
@@ -212,62 +216,68 @@ namespace Shiro.Pages
         {
             try
             {
-                ConnectionOracle.Delete("APPOINTMENT", ((ComboboxItemSalesMan)ComboBoxSalesMan.SelectedItem).Value.ID_SALESMAN, "SALESMAN");
-                ConnectionOracle.Delete("SALESMAN", ((ComboboxItemSalesMan)ComboBoxSalesMan.SelectedItem).Value.ID_SALESMAN);
+                var where = new[,]
+                {
+                    {"ID_SALESMAN", ((ComboboxItemSalesMan) ComboBoxSalesMan.SelectedItem).Value.IdSalesman.ToString(CultureInfo.InvariantCulture)}
+                };
+                Connection.Delete("APPOINTMENT", where);
+                Connection.Delete("SALESMAN", where);
             }
             catch
             {
-                ModernDialog.ShowMessage("Connection à la base de donnée impossible", "Erreur", MessageBoxButton.OK);
+                ModernDialog.ShowMessage("Connection à la base de données impossible", "Erreur", MessageBoxButton.OK);
             }
-
             ComboBoxSalesMan.Items.Clear();
             InitComboClient();
+            ChangeVisibility(false);
         }
 
         private void ButtonUpdate_Click(object sender, RoutedEventArgs e)
         {
-            var SalesMan = ((ComboboxItemSalesMan)ComboBoxSalesMan.SelectedItem).Value;
+            var salesMan = ((ComboboxItemSalesMan) ComboBoxSalesMan.SelectedItem).Value;
             try
             {
-                var set = new[,] { { SalesMan.TELEPHONE, TextPhone.Text }, { SalesMan.MAIL, TextMail.Text } };
-                ConnectionOracle.Update("SALESMAN", SalesMan.ID_SALESMAN, set);
+                var set = new[,] {{salesMan.Telephone, TextPhone.Text}, {salesMan.Mail, TextMail.Text}};
+                Connection.Update("SALESMAN", salesMan.IdSalesman, set);
             }
             catch
             {
-                ModernDialog.ShowMessage("Connection à la base de donnée impossible", "Erreur", MessageBoxButton.OK);
+                ModernDialog.ShowMessage("Connection à la base de données impossible", "Erreur", MessageBoxButton.OK);
             }
             finally
             {
-                SalesMan.TELEPHONE = TextPhone.Text;
-                SalesMan.MAIL = TextMail.Text;
-                ModernDialog.ShowMessage("Informations du commercial " + SalesMan.NAME + SalesMan.FIRSTNAME +" modifiée avec succès", "Opération réussie", MessageBoxButton.OK);
+                salesMan.Telephone = TextPhone.Text;
+                salesMan.Mail = TextMail.Text;
+                ModernDialog.ShowMessage("Informations du commercial " + salesMan.Name + salesMan.Firstname + " modifiée avec succès", "Opération réussie",
+                    MessageBoxButton.OK);
             }
         }
 
         private void ChangeVisibility(bool visibility)
         {
-            if (visibility)
+            if(visibility)
             {
                 BorderSales.Visibility = Visibility.Visible;
                 LabelPhone.Visibility = Visibility.Visible;
+                LabelMail.Visibility = Visibility.Visible;
 
                 TextPhone.Visibility = Visibility.Visible;
                 TextMail.Visibility = Visibility.Visible;
 
-                BTN_Delete.Visibility = Visibility.Visible;
-                BTN_Update.Visibility = Visibility.Visible;
+                BtnDelete.Visibility = Visibility.Visible;
+                BtnUpdate.Visibility = Visibility.Visible;
             }
             else
             {
                 BorderSales.Visibility = Visibility.Hidden;
-
                 LabelPhone.Visibility = Visibility.Hidden;
+                LabelMail.Visibility = Visibility.Hidden;
 
                 TextPhone.Visibility = Visibility.Hidden;
                 TextMail.Visibility = Visibility.Hidden;
 
-                BTN_Delete.Visibility = Visibility.Hidden;
-                BTN_Update.Visibility = Visibility.Hidden;
+                BtnDelete.Visibility = Visibility.Hidden;
+                BtnUpdate.Visibility = Visibility.Hidden;
             }
         }
     }

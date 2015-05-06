@@ -1,8 +1,15 @@
-﻿using System;
+﻿// This program is a private software, based on c# source code.
+// To sell or change credits of this software is forbidden,
+// except if someone approve it from Shiro INC. team.
+//  
+// Copyrights (c) 2014 Shiro INC. All rights reserved.
+
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
 using System.Windows.Media;
 
 using FirstFloor.ModernUI.Windows.Controls;
@@ -12,14 +19,14 @@ using Shiro.Class;
 namespace Shiro.Pages
 {
     /// <summary>
-    /// Interaction logic for Clients.xaml
+    ///   Interaction logic for Clients.xaml
     /// </summary>
-    public partial class Clients
+    internal sealed partial class Clients
     {
-        private static readonly List<CUSTOMER> ListClient = new List<CUSTOMER>();
-        private static readonly List<CUSTOMER> SecondListClient = new List<CUSTOMER>();
+        private static readonly List<Customer> ListClient = new List<Customer>();
+        private static readonly List<Customer> SecondListClient = new List<Customer>();
 
-        private void SelectMarchandiseLike(string Client)
+        private void SelectMarchandiseLike(string client)
         {
             PanelClient.Children.Clear();
             ListClient.Clear();
@@ -27,17 +34,17 @@ namespace Shiro.Pages
             var nbClient = SecondListClient.Count;
             for(var i = 0; i < nbClient; i++)
             {
-                var name = String.Format("{0} {1}", SecondListClient[i].NAME, SecondListClient[i].FIRSTNAME);
-                if(!SecondListClient[i].MAIL.ToLower().Contains(Client.ToLower())
-                   && !name.ToLower().ToString(CultureInfo.InvariantCulture).Contains(Client.ToLower())
-                   && !SecondListClient[i].TELEPHONE.ToLower().ToString(CultureInfo.InvariantCulture).Contains(Client.ToLower())
-                   && !SecondListClient[i].COMPANY.ToLower().ToString(CultureInfo.InvariantCulture).Contains(Client.ToLower()))
+                var name = String.Format("{0} {1}", SecondListClient[i].Name, SecondListClient[i].Firstname);
+                if(!SecondListClient[i].Mail.ToLower().Contains(client.ToLower())
+                   && !name.ToLower().ToString(CultureInfo.InvariantCulture).Contains(client.ToLower())
+                   && !SecondListClient[i].Telephone.ToLower().ToString(CultureInfo.InvariantCulture).Contains(client.ToLower())
+                   && !SecondListClient[i].Company.ToLower().ToString(CultureInfo.InvariantCulture).Contains(client.ToLower()))
                 {
                     continue;
                 }
-                var ID = SecondListClient[i].ID_CUSTOMER;
-                var newClient = new CUSTOMER(ID, SecondListClient[i].TELEPHONE, SecondListClient[i].NAME, SecondListClient[i].FIRSTNAME,
-                    SecondListClient[i].MAIL, SecondListClient[i].COMPANY);
+                var ID = SecondListClient[i].IdCustomer;
+                var newClient = new Customer(ID, SecondListClient[i].Telephone, SecondListClient[i].Name, SecondListClient[i].Firstname,
+                    SecondListClient[i].Mail, SecondListClient[i].Company);
                 Display(newClient);
             }
             if(ListClient.Count != 0)
@@ -73,7 +80,7 @@ namespace Shiro.Pages
             SelectMarchandiseLike(TextBoxClientSearch.Text == String.Empty ? String.Empty : TextBoxClientSearch.Text);
         }
 
-        private void Display(CUSTOMER newClient)
+        private void Display(Customer newClient)
         {
             var panelClient = new StackPanel();
             var thick = new Thickness(5, 2, 0, 0);
@@ -93,49 +100,34 @@ namespace Shiro.Pages
             PanelClient.Children.Add(border);
 
             // Client's name
-            panelClient.Children.Add(new TextBlock
-            {
-                Text = String.Format("{0} {1}", newClient.NAME, newClient.FIRSTNAME),
-                Margin = thick,
-                Height = 16
-            });
+            panelClient.Children.Add(new TextBlock {Text = String.Format("{0} {1}", newClient.Name, newClient.Firstname), Margin = thick, Height = 16});
 
             // Mail
-            panelClient.Children.Add(new TextBlock
-            {
-                Text = String.Format("MAIL : {0}", newClient.MAIL),
-                Margin = new Thickness(5, 2, 0, 0),
-                Height = 16
-            });
+            panelClient.Children.Add(new TextBlock {Text = String.Format("MAIL : {0}", newClient.Mail), Margin = new Thickness(5, 2, 0, 0), Height = 16});
 
             // Company
             panelClient.Children.Add(new TextBlock
             {
-                Text = String.Format("Entreprise : {0}",newClient.COMPANY), 
+                Text = String.Format("Entreprise : {0}", newClient.Company),
                 Margin = new Thickness(5, 2, 0, 0),
                 Height = 16
             });
 
             // Phone
-            panelClient.Children.Add(new TextBlock
-            {
-                Text = String.Format("Numéro de téléphone : {0}", newClient.TELEPHONE),
-                Margin = thick, 
-                Height = 16
-            });
+            panelClient.Children.Add(new TextBlock {Text = String.Format("Numéro de téléphone : {0}", newClient.Telephone), Margin = thick, Height = 16});
 
             // Button
-            var BTN_Delete = new Button
+            var btnDelete = new Button
             {
                 HorizontalAlignment = HorizontalAlignment.Right,
                 Content = "Supprimer le client",
                 Margin = new Thickness(9, -30, 67, 50),
                 BorderBrush = Brushes.Red,
-                Tag = newClient.ID_CUSTOMER
+                Tag = newClient.IdCustomer
             };
 
-            panelClient.Children.Add(BTN_Delete);
-            BTN_Delete.Click += BTN_Delete_Click;
+            panelClient.Children.Add(btnDelete);
+            btnDelete.Click += BTN_Delete_Click;
 
             newClient.Border = border;
             ListClient.Add(newClient);
@@ -143,27 +135,28 @@ namespace Shiro.Pages
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            PanelClient.Children.Clear();
             ListClient.Clear();
             SecondListClient.Clear();
             try
             {
-                //TODO : SQL SERVER
-                var oCommand = ConnectionOracle.GetAll("CUSTOMER");
-                var resultat = oCommand.ExecuteReader();
-                while(resultat.Read())
-                {
-                    var newClient = new CUSTOMER(Convert.ToInt32(resultat["ID_CUSTOMER"]), resultat["TELEPHONE"].ToString(),
-                        resultat["NAME"].ToString(), resultat["FIRSTNAME"].ToString(),
-                        resultat["MAIL"].ToString(), resultat["COMPANY"].ToString());
-                    Display(newClient);
-                    SecondListClient.Add(newClient);
-                }
-                resultat.Close();
+                DisplayAll();
             }
             catch
             {
-                ModernDialog.ShowMessage("Erreur de connexion avec la base de donnée", "Erreur", MessageBoxButton.OK);
+                ModernDialog.ShowMessage("Erreur de connexion avec la base de données", "Erreur", MessageBoxButton.OK);
+            }
+        }
+
+        private void DisplayAll()
+        {
+            PanelClient.Children.Clear();
+            var command = Connection.GetAll("CUSTOMER");
+            var resultat = command.ExecuteReader();
+            while (resultat.Read())
+            {
+                var client = new Customer(Convert.ToInt32(resultat["ID_CUSTOMER"]), resultat["TELEPHONE"].ToString(), resultat["NAME"].ToString(),
+                        resultat["FIRSTNAME"].ToString(), resultat["MAIL"].ToString(), resultat["COMPANY"].ToString());
+                Display(client);
             }
         }
 
@@ -181,18 +174,20 @@ namespace Shiro.Pages
 
         private void BTN_Delete_Click(object sender, EventArgs e)
         {
-            var ID = ((Button)sender).Tag.ToString();
-            var query = String.Format("SELECT {0} FROM {1} WHERE ID_{1} = {2}", "NAME", "CUSTOMER", ID);
-            var name = ConnectionOracle.Command(query);
-            if (ModernDialog.ShowMessage("Supprimer le client " + name, "Etes vous sur ?", MessageBoxButton.YesNo)
-               != MessageBoxResult.Yes)
+            var id = ((Button) sender).Tag.ToString();
+            var query = String.Format("SELECT {0} FROM {1} WHERE ID_{1} = {2}", "NAME", "CUSTOMER", id);
+            var name = Connection.GetFirst(query);
+            if(ModernDialog.ShowMessage("Supprimer le client " + name + " ?", "Etes vous sur ?", MessageBoxButton.YesNo) != MessageBoxResult.Yes)
             {
                 return;
             }
-            ConnectionOracle.Delete("APPOINTMENT", ID, "CUSTOMER");
-            ConnectionOracle.Delete("CUSTOMER", ID);
-            SelectMarchandiseLike(String.Empty);
+            var where = new[,]
+                {
+                    {"ID_CUSTOMER", id}
+                };
+            Connection.Delete("APPOINTMENT", where);
+            Connection.Delete("CUSTOMER", where);
+            DisplayAll();
         }
-        
     }
 }

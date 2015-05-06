@@ -8,6 +8,7 @@
              SizeChanged="MenuSalesMan_SizeChanged"
              d:DesignHeight="300"
              d:DesignWidth="300"
+             x:ClassModifier="internal"
              mc:Ignorable="d">
     <StackPanel MinWidth="150" Margin="10,10,-222,-10">
         <Grid Width="333" HorizontalAlignment="Left">
@@ -58,12 +59,13 @@
                      Margin="0,50,0,0"
                      Text="#TextBoxPhone"
                      Visibility="Hidden" />
-            <TextBlock Grid.Row="2"
+            <TextBlock x:Name="LabelMail"
+                       Grid.Row="2"
                        Grid.Column="0"
                        Grid.ColumnSpan="2"
                        Margin="0,15,14,0"
                        Style="{StaticResource Heading2}"
-                       Text="Mail !"
+                       Text="Mail :"
                        TextWrapping="Wrap"
                        Visibility="Hidden" />
             <TextBox x:Name="TextMail"
@@ -73,7 +75,7 @@
                      Margin="0,15,0,0"
                      Text="#TextBoxMail"
                      Visibility="Hidden" />
-            <Button x:Name="BTN_Update"
+            <Button x:Name="BtnUpdate"
                     Grid.Row="4"
                     Grid.Column="1"
                     Grid.ColumnSpan="3"
@@ -82,7 +84,7 @@
                     Click="ButtonUpdate_Click"
                     Content="Mettre à jour"
                     Visibility="Hidden" />
-            <Button x:Name="BTN_Delete"
+            <Button x:Name="BtnDelete"
                     Grid.Row="5"
                     Grid.Column="1"
                     Grid.ColumnSpan="6"

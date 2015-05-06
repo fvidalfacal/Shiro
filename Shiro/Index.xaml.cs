@@ -1,23 +1,15 @@
-﻿using FirstFloor.ModernUI.Windows.Controls;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+﻿// This program is a private software, based on c# source code.
+// To sell or change credits of this software is forbidden,
+// except if someone approve it from Shiro INC. team.
+//  
+// Copyrights (c) 2014 Shiro INC. All rights reserved.
+
+using FirstFloor.ModernUI.Windows.Controls;
 
 namespace Shiro
 {
     /// <summary>
-    /// Interaction logic for Index.xaml
+    ///   Interaction logic for Index.xaml
     /// </summary>
     public partial class Index : ModernWindow
     {
