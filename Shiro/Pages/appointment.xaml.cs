@@ -54,29 +54,30 @@ namespace Shiro.Pages
             {
                 var commandSalesman = Connection.GetAll("SALESMAN");
                 var resultatSalesman = commandSalesman.ExecuteReader();
-                while (resultatSalesman.Read())
+                while(resultatSalesman.Read())
                 {
                     var text = string.Format("{0} {1}", resultatSalesman["FIRSTNAME"], resultatSalesman["NAME"]);
                     ComboboxSalesMan.Items.Add(new ComboboxItemSalesMan
                     {
                         Text = text,
                         Value =
-                            new SalesMan(Convert.ToInt32(resultatSalesman["ID_SALESMAN"]), resultatSalesman["TELEPHONE"].ToString(), resultatSalesman["NAME"].ToString(),
-                                resultatSalesman["FIRSTNAME"].ToString(), resultatSalesman["MAIL"].ToString())
+                            new SalesMan(Convert.ToInt32(resultatSalesman["ID_SALESMAN"]), resultatSalesman["TELEPHONE"].ToString(),
+                                resultatSalesman["NAME"].ToString(), resultatSalesman["FIRSTNAME"].ToString(), resultatSalesman["MAIL"].ToString())
                     });
                 }
                 resultatSalesman.Close();
                 var commandClient = Connection.GetAll("CUSTOMER");
                 var resultatClient = commandClient.ExecuteReader();
-                while (resultatClient.Read())
+                while(resultatClient.Read())
                 {
                     var text = string.Format("{0} {1}", resultatClient["FIRSTNAME"], resultatClient["NAME"]);
                     ComboBoxClient.Items.Add(new ComboboxItemCustomer
                     {
                         Text = text,
                         Value =
-                            new Customer(Convert.ToInt32(resultatClient["ID_CUSTOMER"]), resultatClient["TELEPHONE"].ToString(), resultatClient["NAME"].ToString(),
-                                resultatClient["FIRSTNAME"].ToString(), resultatClient["MAIL"].ToString(), resultatClient["COMPANY"].ToString())
+                            new Customer(Convert.ToInt32(resultatClient["ID_CUSTOMER"]), resultatClient["TELEPHONE"].ToString(),
+                                resultatClient["NAME"].ToString(), resultatClient["FIRSTNAME"].ToString(), resultatClient["MAIL"].ToString(),
+                                resultatClient["COMPANY"].ToString())
                     });
                 }
                 resultatClient.Close();
@@ -113,11 +114,10 @@ namespace Shiro.Pages
             DatePickerAppoint.Text = DateTime.Now.ToString(CultureInfo.InvariantCulture);
         }
 
-
         private bool TextChanged()
         {
             var boolean = TimePickerFinMin.Text != string.Empty && TimePickerFinHeure.Text != string.Empty && TimePickerDebutHeure.Text != string.Empty
-                            && TimePickerDebutMin.Text != string.Empty && ComboBoxClient.Text != string.Empty && ComboboxSalesMan.Text != string.Empty;
+                          && TimePickerDebutMin.Text != string.Empty && ComboBoxClient.Text != string.Empty && ComboboxSalesMan.Text != string.Empty;
             if(!boolean)
             {
                 MessageBox.Show("Champs incorrects", "erreur");
@@ -137,8 +137,7 @@ namespace Shiro.Pages
             {
                 var queryVerify = String.Empty;
 
-
-               /* var queryVerify = String.Format("SELECT * FROM {0} WHERE {1} = '{2}' OR {3} = '{4}'", "APPOINTMENT", "TELEPHONE", TextBoxPhone.Text, "MAIL",
+                /* var queryVerify = String.Format("SELECT * FROM {0} WHERE {1} = '{2}' OR {3} = '{4}'", "APPOINTMENT", "TELEPHONE", TextBoxPhone.Text, "MAIL",
                         TextBoxMail.Text);*/
                 if(Connection.SizeOf(queryVerify) == 0)
                 {
@@ -150,12 +149,13 @@ namespace Shiro.Pages
                     var querySelect = String.Format("SELECT max(ID_{0}) FROM {0}", "CUSTOMER");
                     var command = Connection.GetFirst(querySelect);
                     var idAppoint = command.ToString() == String.Empty ? 1 : Convert.ToInt32(command) + 1;
-                    Connection.Insert("APPOINTMENT", idAppoint, idCustomer, idSalesman , Date.Fr2Us(DatePickerAppoint.Text), heureDebut, heureFin);
+                    Connection.Insert("APPOINTMENT", idAppoint, idCustomer, idSalesman, Date.Fr2Us(DatePickerAppoint.Text), heureDebut, heureFin);
                     ModernDialog.ShowMessage("Le rendez vous à été correctement ajouté", "Succès", MessageBoxButton.OK);
-                    ShowAppoint(idAppoint, idSalesman, idCustomer, DatePickerAppoint.Text, heureDebut , heureFin);
+                    ShowAppoint(idAppoint, idSalesman, idCustomer, DatePickerAppoint.Text, heureDebut, heureFin);
 
-                    TimePickerFinMin.Text = TimePickerFinHeure.Text = TimePickerDebutHeure.Text  
-                        = TimePickerDebutMin.Text = ComboBoxClient.Text  = ComboboxSalesMan.Text = String.Empty;
+                    TimePickerFinMin.Text =
+                        TimePickerFinHeure.Text =
+                            TimePickerDebutHeure.Text = TimePickerDebutMin.Text = ComboBoxClient.Text = ComboboxSalesMan.Text = String.Empty;
                 }
                 else
                 {
@@ -187,24 +187,24 @@ namespace Shiro.Pages
             };
             //NomClient
             var cli = string.Empty;
-            var commandCli = Connection.Command(string.Format("SELECT NAME, FIRSTNAME FROM CUSTOMER WHERE ID_CUSTOMER ={0}",idClient));
+            var commandCli = Connection.Command(string.Format("SELECT NAME, FIRSTNAME FROM CUSTOMER WHERE ID_CUSTOMER ={0}", idClient));
             var resultatClient = commandCli.ExecuteReader();
-            while (resultatClient.Read())
+            while(resultatClient.Read())
             {
-                cli = string.Format("{0} {1}",resultatClient["NAME"], resultatClient["FIRSTNAME"]);
+                cli = string.Format("{0} {1}", resultatClient["NAME"], resultatClient["FIRSTNAME"]);
             }
             resultatClient.Close();
             //NomCom
             var com = string.Empty;
-            var commandCom = Connection.Command(string.Format("SELECT NAME, FIRSTNAME FROM SALESMAN WHERE ID_SALESMAN ={0}",idSalesman));
+            var commandCom = Connection.Command(string.Format("SELECT NAME, FIRSTNAME FROM SALESMAN WHERE ID_SALESMAN ={0}", idSalesman));
             var resultatCom = commandCom.ExecuteReader();
-            while (resultatCom.Read())
+            while(resultatCom.Read())
             {
-                com = string.Format("{0} {1}",resultatCom["NAME"], resultatCom["FIRSTNAME"]);
+                com = string.Format("{0} {1}", resultatCom["NAME"], resultatCom["FIRSTNAME"]);
             }
             resultatCom.Close();
             // Libelle
-            var lib = string.Format("Le rendez vous entre le client '{0}' et le commercial '{1}'",cli,com);
+            var lib = string.Format("Le rendez vous entre le client '{0}' et le commercial '{1}'", cli, com);
             panelCustomer.Children.Add(new TextBlock {Margin = thick, Text = lib, Height = 16});
 
             // Date
@@ -227,7 +227,7 @@ namespace Shiro.Pages
 
             panelCustomer.Children.Add(btnDelete);
             btnDelete.Click += BTN_Delete_Click;
-            var newAppoint = new Class.Appointment(id, idClient, idSalesman, date, heureDebut,  heureFin);
+            var newAppoint = new Class.Appointment(id, idClient, idSalesman, date, heureDebut, heureFin);
             PanelCustomer.Children.Add(border);
             newAppoint.Border = border;
             ListAppointment.Add(newAppoint);
