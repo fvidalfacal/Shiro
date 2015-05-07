@@ -208,7 +208,7 @@ namespace Shiro.Pages
             panelCustomer.Children.Add(new TextBlock {Margin = thick, Text = lib, Height = 16});
 
             // Date
-            date = string.Format("Le : {0}", Date.Us2Fr(date));
+            //date = string.Format("Le : {0}", Date.Us2Fr(date));
             panelCustomer.Children.Add(new TextBlock {Text = date, Margin = thick, Height = 16});
 
             // horaire

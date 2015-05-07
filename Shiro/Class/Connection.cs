@@ -48,6 +48,12 @@ namespace Shiro.Class
             return Command(String.Format("SELECT * FROM {0}", tableQuery));
         }
 
+        /// <summary>
+        ///   Requête d'insertion dans la base de données
+        /// </summary>
+        /// <param name="tableQuery">string : Nom de la table</param>
+        /// <param name="id">id de l'object a modifier</param>
+        /// <param name="value">Tableau de string à double entré {{"nom de la colonne","valeur"}{"nom de la colonne","valeur"}}</param>
         internal static void Insert(string tableQuery, params Object[] value)
         {
             var query = value.Aggregate(String.Empty, (current, field) => current + ("'" + field + "',"));
@@ -58,6 +64,12 @@ namespace Shiro.Class
             command.ExecuteNonQuery();
         }
 
+        /// <summary>
+        ///   Requête de suppression dans la base de données
+        /// </summary>
+        /// <param name="tableQuery">string : Nom de la table</param>
+        /// <param name="id">id de l'object a modifier</param>
+        /// <param name="value">Tableau de string à double entré {{"nom de la colonne","valeur"}{"nom de la colonne","valeur"}}</param>
         public static void Delete(string tableQuery, String[,] value)
         {
             var queryWhere = String.Empty;
@@ -73,7 +85,7 @@ namespace Shiro.Class
         }
 
         /// <summary>
-        ///   +
+        ///   Requête de mise à jour dans la base de données
         /// </summary>
         /// <param name="tableQuery">string : Nom de la table</param>
         /// <param name="id">id de l'object a modifier</param>
@@ -98,11 +110,22 @@ namespace Shiro.Class
             return command.ExecuteScalar();
         }
 
+
+        /// <summary>
+        /// Convertis la taille de la requête en int32
+        /// </summary>
+        /// <param name="command">Instruction SQL</param>
+        /// <returns></returns>
         private static Int32 SizeOf(IDbCommand command)
         {
             return Convert.ToInt32(command.ExecuteScalar());
         }
 
+        /// <summary>
+        /// Retourne la taille du résultat de la requête
+        /// </summary>
+        /// <param name="query">Argument de la requête SQL</param>
+        /// <returns></returns>
         public static Int32 SizeOf(string query)
         {
             return SizeOf(Command(String.Format("SELECT COUNT(*) FROM ({0})", query)));
