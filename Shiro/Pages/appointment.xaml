@@ -4,12 +4,13 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              x:Name="AppointmentPage"
+             Initialized="AppointmentPage_Initialized"
              Loaded="Appointment_Loaded"
              SizeChanged="Appointment_SizeChanged"
              d:DesignHeight="300"
              d:DesignWidth="300"
              x:ClassModifier="internal"
-             mc:Ignorable="d" Initialized="AppointmentPage_Initialized">
+             mc:Ignorable="d">
     <Grid Style="{StaticResource ContentRoot}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="35*" />
@@ -105,7 +106,6 @@
                               VerticalAlignment="Bottom"
                               BorderBrush="{DynamicResource Accent}"
                               Grid.IsSharedSizeScope="True"
-                              SelectionChanged="Combobox_SelectionChanged"
                               TabIndex="2" />
                     <Button x:Name="BtnAdd"
                             Grid.Row="1"
@@ -118,8 +118,7 @@
                             VerticalAlignment="Top"
                             BorderBrush="{DynamicResource Accent}"
                             Click="BtnAdd_Click"
-                            Content="Ajouter"
-                            IsEnabled="False" />
+                            Content="Ajouter" />
                     <TextBlock Grid.Row="1"
                                Grid.Column="0"
                                Grid.ColumnSpan="2"
@@ -135,8 +134,7 @@
                               Margin="25,0,-57,17"
                               VerticalAlignment="Bottom"
                               BorderBrush="{DynamicResource Accent}"
-                              Grid.IsSharedSizeScope="True"
-                              SelectionChanged="Combobox_SelectionChanged" />
+                              Grid.IsSharedSizeScope="True" />
                     <TextBlock Grid.Row="1"
                                Grid.Column="0"
                                Grid.ColumnSpan="2"
@@ -161,7 +159,6 @@
                               VerticalAlignment="Bottom"
                               BorderBrush="{DynamicResource Accent}"
                               Grid.IsSharedSizeScope="True"
-                              SelectionChanged="Combobox_SelectionChanged"
                               TabIndex="2" />
                     <ComboBox x:Name="TimePickerDebutHeure"
                               Grid.Row="1"
@@ -172,7 +169,6 @@
                               VerticalAlignment="Bottom"
                               BorderBrush="{DynamicResource Accent}"
                               Grid.IsSharedSizeScope="True"
-                              SelectionChanged="Combobox_SelectionChanged"
                               TabIndex="2" />
                     <TextBlock Grid.Row="1"
                                Grid.Column="0"
@@ -190,7 +186,6 @@
                               VerticalAlignment="Bottom"
                               BorderBrush="{DynamicResource Accent}"
                               Grid.IsSharedSizeScope="True"
-                              SelectionChanged="Combobox_SelectionChanged"
                               TabIndex="2" />
                     <ComboBox x:Name="TimePickerFinMin"
                               Grid.Row="1"
@@ -200,7 +195,6 @@
                               VerticalAlignment="Top"
                               BorderBrush="{DynamicResource Accent}"
                               Grid.IsSharedSizeScope="True"
-                              SelectionChanged="Combobox_SelectionChanged"
                               TabIndex="2" />
                 </Grid>
                 <Grid>

@@ -4,7 +4,6 @@
 //  
 // Copyrights (c) 2014 Shiro INC. All rights reserved.
 
-using System;
 using System.Windows.Controls;
 
 namespace Shiro.Class
@@ -19,16 +18,6 @@ namespace Shiro.Class
             Day = day;
             Starttime = starttime;
             Endtime = endtime;
-        }
-
-        public Appointment()
-        {
-            IdAppointment = 0;
-            IdCustomer = 0;
-            IdSalesman = 0;
-            Day = String.Empty;
-            Starttime = String.Empty;
-            Endtime = String.Empty;
         }
 
         public int IdCustomer { get; set; }
