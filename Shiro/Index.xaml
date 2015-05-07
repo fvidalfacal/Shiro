@@ -22,6 +22,7 @@
         </mui:LinkGroup>
         <mui:LinkGroup DisplayName="Rendez-vous">
             <mui:LinkGroup.Links>
+                <mui:Link DisplayName="Liste des rendez vous" Source="Pages/ListAppointment.xaml" />
                 <mui:Link DisplayName="Ajouter un rendez vous" Source="Pages/appointment.xaml" />
             </mui:LinkGroup.Links>
         </mui:LinkGroup>

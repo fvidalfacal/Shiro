@@ -83,14 +83,14 @@ namespace Shiro.Pages
                             Height = 70
                         };
 
-                        var name = String.Empty;
-                        var queryName = String.Format("SELECT {0}, {1} FROM {2} WHERE {3} = {4}", "NAME", "FIRSTNAME", "CUSTOMER", "ID_CUSTOMER",
+                        var name = string.Empty;
+                        var queryName = string.Format("SELECT {0}, {1} FROM {2} WHERE {3} = {4}", "NAME", "FIRSTNAME", "CUSTOMER", "ID_CUSTOMER",
                             resultatAppointment["ID_CUSTOMER"]);
                         var commandName = Connection.Command(queryName);
                         var resultatName = commandName.ExecuteReader();
                         while(resultatName.Read())
                         {
-                            name = String.Format("{0} {1}", resultatName["NAME"], resultatName["FIRSTNAME"]);
+                            name = string.Format("{0} {1}", resultatName["NAME"], resultatName["FIRSTNAME"]);
                         }
 
                         // CUSTOMER's name
@@ -106,7 +106,7 @@ namespace Shiro.Pages
                         // Time
                         panelAppoint.Children.Add(new TextBlock
                         {
-                            Text = String.Format("De {0} à {1}", resultatAppointment["STARTTIME"], resultatAppointment["ENDTIME"]),
+                            Text = string.Format("De {0} à {1}", resultatAppointment["STARTTIME"], resultatAppointment["ENDTIME"]),
                             Margin = thick,
                             Height = 16
                         });
@@ -237,7 +237,7 @@ namespace Shiro.Pages
             var salesMan = ((ComboboxItemSalesMan) ComboBoxSalesMan.SelectedItem).Value;
             try
             {
-                var set = new[,] {{salesMan.Telephone, TextPhone.Text}, {salesMan.Mail, TextMail.Text}};
+                var set = new[,] {{"TELEPHONE", TextPhone.Text}, {"MAIL", TextMail.Text}};
                 Connection.Update("SALESMAN", salesMan.IdSalesman, set);
             }
             catch

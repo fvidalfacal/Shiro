@@ -120,11 +120,9 @@ namespace Shiro.Pages
                           && TimePickerDebutMin.Text != string.Empty && ComboBoxClient.Text != string.Empty && ComboboxSalesMan.Text != string.Empty;
             if(!boolean)
             {
-                MessageBox.Show("Champs incorrects", "erreur");
+                MessageBox.Show("Champs incorrects ou incomplets", "erreur");
             }
             return boolean;
-            //MessageBox.Show(TimePickerFinMin.Text +" ,"+ TimePickerFinHeure.Text +" ,"+ TimePickerDebutHeure.Text 
-            //    +" ,"+  TimePickerDebutMin.Text +" ,"+  ComboBoxClient.Text+" ,"+ ComboboxSalesMan.Text );
         }
 
         private void BtnAdd_Click(object sender, RoutedEventArgs e)
@@ -135,31 +133,54 @@ namespace Shiro.Pages
             }
             try
             {
-                var queryVerify = String.Empty;
-
-                /* var queryVerify = String.Format("SELECT * FROM {0} WHERE {1} = '{2}' OR {3} = '{4}'", "APPOINTMENT", "TELEPHONE", TextBoxPhone.Text, "MAIL",
-                        TextBoxMail.Text);*/
-                if(Connection.SizeOf(queryVerify) == 0)
+                var heureDebut = TimePickerDebutHeure.Text;
+                if(Convert.ToInt32(TimePickerDebutHeure.Text) < 10)
                 {
-                    var heureDebut = string.Format("{0}:{1}", TimePickerDebutHeure.Text, TimePickerDebutMin.Text);
-                    var heureFin = string.Format("{0}:{1}", TimePickerFinHeure.Text, TimePickerFinMin.Text);
-                    var idCustomer = ((ComboboxItemCustomer) ComboBoxClient.SelectedItem).Value.IdCustomer;
-                    var idSalesman = ((ComboboxItemSalesMan) ComboboxSalesMan.SelectedItem).Value.IdSalesman;
+                    heureDebut = string.Format("0{0}", TimePickerDebutHeure.Text);
+                }
 
-                    var querySelect = String.Format("SELECT max(ID_{0}) FROM {0}", "CUSTOMER");
+                var minDebut = TimePickerDebutMin.Text;
+                if (Convert.ToInt32(TimePickerDebutMin.Text) < 10)
+                {
+                    minDebut = string.Format("0{0}", TimePickerDebutMin.Text);
+                }
+                var debut = string.Format("{0}:{1}", heureDebut, minDebut);
+
+                var heureFin = TimePickerFinHeure.Text;
+                if (Convert.ToInt32(TimePickerFinHeure.Text) < 10)
+                {
+                    heureFin = string.Format("0{0}", TimePickerFinHeure.Text);
+                }
+
+                var minFin = TimePickerFinMin.Text;
+                if (Convert.ToInt32(TimePickerFinMin.Text) < 10)
+                {
+                    minFin = string.Format("0{0}", TimePickerFinMin.Text);
+                }
+                var fin = string.Format("{0}:{1}", heureFin, minFin);
+
+                var idCustomer = ((ComboboxItemCustomer) ComboBoxClient.SelectedItem).Value.IdCustomer;
+                var idSalesman = ((ComboboxItemSalesMan) ComboboxSalesMan.SelectedItem).Value.IdSalesman;
+                 var queryVerifyCustomer = string.Format("SELECT * FROM {0} WHERE {1} = '{2}' AND {3} = '{4}' AND {5} BETWEEN '{6}' AND '{7}' AND {8} BETWEEN '{9}' AND '{10}'", "APPOINTMENT", "ID_CUSTOMER", idCustomer, "DAY",
+                        DatePickerAppoint.Text ,"STARTTIME", debut, fin , "ENDTIME", debut, fin) ;
+                 var queryVerifySalesman = string.Format("SELECT * FROM {0} WHERE {1} = '{2}' AND {3} = '{4}' AND {5} BETWEEN '{6}' AND '{7}' AND {8} BETWEEN '{9}' AND '{10}'", "APPOINTMENT", "ID_SALESMAN", idSalesman, "DAY",
+                        DatePickerAppoint.Text, "STARTTIME", debut, fin, "ENDTIME", debut, fin);
+                if(Connection.SizeOf(queryVerifyCustomer) == 0 && Connection.SizeOf(queryVerifySalesman) == 0)
+                {
+                    var querySelect = string.Format("SELECT max(ID_{0}) FROM {0}", "APPOINTMENT");
                     var command = Connection.GetFirst(querySelect);
-                    var idAppoint = command.ToString() == String.Empty ? 1 : Convert.ToInt32(command) + 1;
-                    Connection.Insert("APPOINTMENT", idAppoint, idCustomer, idSalesman, Date.Fr2Us(DatePickerAppoint.Text), heureDebut, heureFin);
+                    var idAppoint = command.ToString() == string.Empty ? 1 : Convert.ToInt32(command) + 1;
+                    Connection.Insert("APPOINTMENT", idAppoint, idCustomer, idSalesman, DatePickerAppoint.Text, heureDebut, heureFin);
                     ModernDialog.ShowMessage("Le rendez vous à été correctement ajouté", "Succès", MessageBoxButton.OK);
-                    ShowAppoint(idAppoint, idSalesman, idCustomer, DatePickerAppoint.Text, heureDebut, heureFin);
+                    ShowAppoint(idAppoint, idCustomer, idSalesman, DatePickerAppoint.Text, debut, fin);
 
                     TimePickerFinMin.Text =
                         TimePickerFinHeure.Text =
-                            TimePickerDebutHeure.Text = TimePickerDebutMin.Text = ComboBoxClient.Text = ComboboxSalesMan.Text = String.Empty;
+                            TimePickerDebutHeure.Text = TimePickerDebutMin.Text = ComboBoxClient.Text = ComboboxSalesMan.Text = string.Empty;
                 }
                 else
                 {
-                    ModernDialog.ShowMessage("Ce rendez vous existe deja", "Erreur", MessageBoxButton.OK);
+                    ModernDialog.ShowMessage("Ce rendez vous existe deja ou un des protagoniste à déjà un rendez vous pour cette plage horaire", "Erreur", MessageBoxButton.OK);
                 }
             }
             catch
@@ -208,7 +229,7 @@ namespace Shiro.Pages
             panelCustomer.Children.Add(new TextBlock {Margin = thick, Text = lib, Height = 16});
 
             // Date
-            //date = string.Format("Le : {0}", Date.Us2Fr(date));
+            date = string.Format("Le : {0}", date.Split(new[] { ' ' })[0]);
             panelCustomer.Children.Add(new TextBlock {Text = date, Margin = thick, Height = 16});
 
             // horaire
@@ -219,7 +240,7 @@ namespace Shiro.Pages
             var btnDelete = new Button
             {
                 HorizontalAlignment = HorizontalAlignment.Right,
-                Content = "Supprimer le client",
+                Content = "Supprimer le rendez vous",
                 Margin = new Thickness(9, -30, 67, 50),
                 BorderBrush = Brushes.Red,
                 Tag = id

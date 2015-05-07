@@ -7,6 +7,7 @@
 using System;
 using System.Data;
 using System.Linq;
+using System.Windows;
 
 using Oracle.ManagedDataAccess.Client;
 
@@ -116,8 +117,9 @@ namespace Shiro.Class
         /// </summary>
         /// <param name="command">Instruction SQL</param>
         /// <returns></returns>
-        private static Int32 SizeOf(IDbCommand command)
+        private static int SizeOf(IDbCommand command)
         {
+
             return Convert.ToInt32(command.ExecuteScalar());
         }
 
@@ -126,9 +128,9 @@ namespace Shiro.Class
         /// </summary>
         /// <param name="query">Argument de la requête SQL</param>
         /// <returns></returns>
-        public static Int32 SizeOf(string query)
+        public static int SizeOf(string query)
         {
-            return SizeOf(Command(String.Format("SELECT COUNT(*) FROM ({0})", query)));
+            return SizeOf(Command(string.Format("SELECT COUNT(*) FROM ({0})", query)));
         }
     }
 }
